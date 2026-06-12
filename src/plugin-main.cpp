@@ -1037,7 +1037,7 @@ static void OnFrontendEvent(enum obs_frontend_event event, void *)
 	}
 }
 
-extern "C" bool obs_module_load(void)
+MODULE_EXPORT bool obs_module_load(void)
 {
 	blog(LOG_INFO, "vinyl-reel plugin loaded");
 
@@ -1055,7 +1055,7 @@ extern "C" bool obs_module_load(void)
 	return true;
 }
 
-extern "C" void obs_module_unload(void)
+MODULE_EXPORT void obs_module_unload(void)
 {
 	obs_frontend_remove_event_callback(OnFrontendEvent, nullptr);
 	obs_frontend_remove_dock(kDockId);

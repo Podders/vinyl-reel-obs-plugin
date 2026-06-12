@@ -5,12 +5,20 @@
 #include <stdarg.h>
 
 #ifdef __cplusplus
+#if defined(_WIN32)
+#define MODULE_EXPORT extern "C" __declspec(dllexport)
+#else
 #define MODULE_EXPORT extern "C" __attribute__((visibility("default")))
+#endif
 #define MODULE_EXTERN extern "C"
 #define OBS_EXTERN_C_BEGIN extern "C" {
 #define OBS_EXTERN_C_END }
 #else
+#if defined(_WIN32)
+#define MODULE_EXPORT __declspec(dllexport)
+#else
 #define MODULE_EXPORT __attribute__((visibility("default")))
+#endif
 #define MODULE_EXTERN extern
 #define OBS_EXTERN_C_BEGIN
 #define OBS_EXTERN_C_END
