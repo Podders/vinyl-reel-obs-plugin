@@ -1,4 +1,11 @@
 /build
+/build_macos
+/build_windows
+/release
+/ci/.deps
+/ci/cmake/.CMakeBuildNumber
+/ci/build_macos
+/ci/build_windows
 /out
 /.idea
 *.user

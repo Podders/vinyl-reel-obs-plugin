@@ -18,8 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure
+        run: cmake -S ci -B build_macos -G Xcode -DCMAKE_INSTALL_PREFIX="${VINYL_REEL_INSTALL_PREFIX}" -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
       - name: Build
-        run: ./scripts/build-macos.sh
+        run: cmake --build build_macos --config RelWithDebInfo --parallel
+
+      - name: Install
+        run: cmake --install build_macos --config RelWithDebInfo
 
       - name: Package
         run: |
@@ -39,15 +45,23 @@ jobs:
 
   build-windows:
     name: Build Windows
-    runs-on: [self-hosted, windows, x64]
+    runs-on: windows-2022
     env:
-      VINYL_REEL_INSTALL_PREFIX: ${{ github.workspace }}/release
+      VINYL_REEL_INSTALL_PREFIX: ${{ github.workspace }}\release
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure
+        shell: pwsh
+        run: cmake -S ci -B build_windows -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX="$env:VINYL_REEL_INSTALL_PREFIX"
+
       - name: Build
         shell: pwsh
-        run: .\scripts\build-windows.ps1
+        run: cmake --build build_windows --config RelWithDebInfo --parallel
+
+      - name: Install
+        shell: pwsh
+        run: cmake --install build_windows --config RelWithDebInfo
 
       - name: Package
         shell: pwsh
