@@ -12,7 +12,7 @@ permissions:
 jobs:
   build-macos:
     name: Build macOS
-    runs-on: macos-15
+    runs-on: macos-14
     env:
       VINYL_REEL_INSTALL_PREFIX: ${{ github.workspace }}/release
     steps:
