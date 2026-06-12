@@ -31,6 +31,7 @@ Use `scripts/build-macos.sh` for the full configure/build/install step.
 
 The repository now includes a release workflow in `.github/workflows/release.yml`.
 It builds both macOS and Windows from the `ci/` build tree on GitHub-hosted runners, using the OBS dependency bootstrap data checked into that tree.
+Windows releases now include both a zip archive and an Inno Setup installer.
 Tag a commit with a `v` prefix, for example `v0.1.0`, to trigger the release path.
 
 ## Plugin layout

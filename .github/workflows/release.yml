@@ -80,6 +80,26 @@ jobs:
           name: vinyl-reel-windows
           path: artifacts/vinyl-reel-windows.zip
 
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not (Get-Command ISCC.exe -ErrorAction SilentlyContinue)) {
+            choco install innosetup -y --no-progress
+          }
+
+      - name: Build Installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Version = (Get-Content -Path ci/buildspec.json -Raw | ConvertFrom-Json).version
+          .\scripts\package-windows-installer.ps1 -Version $Version
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vinyl-reel-windows-installer
+          path: artifacts/vinyl-reel-*windows-setup.exe
+
   release:
     name: Publish Release
     needs:
@@ -100,11 +120,18 @@ jobs:
           name: vinyl-reel-windows
           path: dist
 
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: vinyl-reel-windows-installer
+          path: dist
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/vinyl-reel-macos.zip
             dist/vinyl-reel-windows.zip
+            dist/vinyl-reel-*windows-setup.exe
           draft: false
           generate_release_notes: true

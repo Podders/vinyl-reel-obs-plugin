@@ -86,6 +86,7 @@ The repository also has a GitHub Actions release workflow at `.github/workflows/
 - macOS builds run on GitHub-hosted runners from the `ci/` tree
 - Windows builds run on GitHub-hosted runners from the same `ci/` tree
 - the bootstrap data in `ci/buildspec.json` drives the OBS dependency download and build
+- Windows release artifacts include both a zip and an Inno Setup installer
 - tagging a commit with a `v` prefix triggers the release publish path
 
 ## Next step
