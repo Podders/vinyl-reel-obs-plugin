@@ -44,7 +44,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $BinDir = Join-Path (Get-Location) 'release/vinyl-reel/bin/64bit'
           $System32 = Join-Path $env:WINDIR 'System32'
-          foreach ($Dll in 'vcruntime140.dll', 'vcruntime140_1.dll', 'msvcp140.dll') {
+          foreach ($Dll in 'vcruntime140.dll', 'vcruntime140_1.dll', 'msvcp140.dll', 'msvcp140_1.dll', 'msvcp140_2.dll') {
             $Source = Join-Path $System32 $Dll
             if (-not (Test-Path $Source)) {
               throw "Missing runtime DLL: $Source"
