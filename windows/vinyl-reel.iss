@@ -26,7 +26,7 @@ UsePreviousAppDir=no
 UninstallDisplayIcon={app}\bin\64bit\vinyl-reel.dll
 
 [Files]
-Source: "..\release\vinyl-reel\bin\64bit\vinyl-reel.dll"; DestDir: "{app}\bin\64bit"; Flags: ignoreversion
+Source: "..\release\vinyl-reel\bin\64bit\*"; DestDir: "{app}\bin\64bit"; Flags: recursesubdirs createallsubdirs ignoreversion; Excludes: "*.pdb"
 Source: "..\release\vinyl-reel\data\*"; DestDir: "{app}\data"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Languages]
