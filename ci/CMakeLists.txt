@@ -59,7 +59,12 @@ if(APPLE)
   install(DIRECTORY ../data/ DESTINATION "vinyl-reel.plugin/Contents/Resources/data")
 elseif(WIN32)
   install(TARGETS ${CMAKE_PROJECT_NAME} RUNTIME DESTINATION "vinyl-reel/bin/64bit" LIBRARY DESTINATION "vinyl-reel/bin/64bit")
-  install(FILES "$<TARGET_RUNTIME_DLLS:${CMAKE_PROJECT_NAME}>" DESTINATION "vinyl-reel/bin/64bit")
+  install(
+    FILES
+      "$<FILTER:$<TARGET_RUNTIME_DLLS:${CMAKE_PROJECT_NAME}>,EXCLUDE,.*[\\\\/]obs\\.dll$>"
+      "$<FILTER:$<TARGET_RUNTIME_DLLS:${CMAKE_PROJECT_NAME}>,EXCLUDE,.*[\\\\/]obs-frontend-api\\.dll$>"
+    DESTINATION "vinyl-reel/bin/64bit"
+  )
 
   install(DIRECTORY ../data/ DESTINATION "vinyl-reel/data")
 else()
