@@ -27,6 +27,13 @@ OBS does not hot-reload native plugin binaries, so the speed comes from making t
 
 Use `scripts/build-macos.sh` for the full configure/build/install step.
 
+## GitHub Actions
+
+The repository now includes a release workflow in `.github/workflows/release.yml`.
+It builds macOS on GitHub-hosted runners and packages Windows on a Windows runner that has `VINYL_REEL_OBS_ROOT` configured.
+That Windows runner can be self-hosted for now; that is the only piece that is still infrastructure work.
+Tag a commit with a `v` prefix, for example `v0.1.0`, to trigger the release path.
+
 ## Plugin layout
 
 OBS expects plugin files in a platform-specific structure:

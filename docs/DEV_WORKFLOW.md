@@ -79,6 +79,15 @@ For now the workflow is:
 6. sync the collection
 7. select a release and render it into the current scene
 
+## Release automation
+
+The repository also has a GitHub Actions release workflow at `.github/workflows/release.yml`.
+
+- macOS builds run on GitHub-hosted runners
+- Windows builds require a Windows runner with `VINYL_REEL_OBS_ROOT` set to a Windows OBS development install
+- for now, that Windows runner can be self-hosted
+- tagging a commit with a `v` prefix triggers the release publish path
+
 ## Next step
 
 Once the skeleton is stable, the next useful improvement is a build helper that watches for changes and reruns the install automatically.

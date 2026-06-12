@@ -1,0 +1,96 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build macOS
+    runs-on: macos-15
+    env:
+      VINYL_REEL_INSTALL_PREFIX: ${{ github.workspace }}/release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: ./scripts/build-macos.sh
+
+      - name: Package
+        run: |
+          set -euo pipefail
+          ROOT_DIR="$(pwd)"
+          RELEASE_DIR="${ROOT_DIR}/release"
+          ARTIFACT_DIR="${ROOT_DIR}/artifacts"
+          mkdir -p "${ARTIFACT_DIR}"
+          ditto -c -k --sequesterRsrc --keepParent \
+            "${RELEASE_DIR}/vinyl-reel.plugin" \
+            "${ARTIFACT_DIR}/vinyl-reel-macos.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vinyl-reel-macos
+          path: artifacts/vinyl-reel-macos.zip
+
+  build-windows:
+    name: Build Windows
+    runs-on: [self-hosted, windows, x64]
+    env:
+      VINYL_REEL_INSTALL_PREFIX: ${{ github.workspace }}/release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        shell: pwsh
+        run: .\scripts\build-windows.ps1
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $RootDir = Get-Location
+          $ReleaseDir = Join-Path $RootDir 'release'
+          $ArtifactDir = Join-Path $RootDir 'artifacts'
+          New-Item -ItemType Directory -Force -Path $ArtifactDir | Out-Null
+          $ZipPath = Join-Path $ArtifactDir 'vinyl-reel-windows.zip'
+          if (Test-Path $ZipPath) { Remove-Item $ZipPath -Force }
+          Compress-Archive -Path (Join-Path $ReleaseDir '*') -DestinationPath $ZipPath -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vinyl-reel-windows
+          path: artifacts/vinyl-reel-windows.zip
+
+  release:
+    name: Publish Release
+    needs:
+      - build-macos
+      - build-windows
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vinyl-reel-macos
+          path: dist
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vinyl-reel-windows
+          path: dist
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/vinyl-reel-macos.zip
+            dist/vinyl-reel-windows.zip
+          draft: true
+          generate_release_notes: true
