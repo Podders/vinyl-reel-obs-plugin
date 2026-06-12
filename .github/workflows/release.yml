@@ -38,6 +38,20 @@ jobs:
           Remove-Item (Join-Path $BinDir 'obs.dll') -Force -ErrorAction SilentlyContinue
           Remove-Item (Join-Path $BinDir 'obs-frontend-api.dll') -Force -ErrorAction SilentlyContinue
 
+      - name: Add VC Runtime DLLs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $BinDir = Join-Path (Get-Location) 'release/vinyl-reel/bin/64bit'
+          $System32 = Join-Path $env:WINDIR 'System32'
+          foreach ($Dll in 'vcruntime140.dll', 'vcruntime140_1.dll', 'msvcp140.dll') {
+            $Source = Join-Path $System32 $Dll
+            if (-not (Test-Path $Source)) {
+              throw "Missing runtime DLL: $Source"
+            }
+            Copy-Item $Source $BinDir -Force
+          }
+
       - name: Package
         shell: pwsh
         run: |
