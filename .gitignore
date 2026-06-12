@@ -1,0 +1,8 @@
+/build
+/out
+/.idea
+*.user
+*.vcxproj.user
+*.xcworkspace
+*.xcodeproj
+*.DS_Store
