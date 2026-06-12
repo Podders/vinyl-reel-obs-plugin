@@ -106,5 +106,5 @@ jobs:
           files: |
             dist/vinyl-reel-macos.zip
             dist/vinyl-reel-windows.zip
-          draft: true
+          draft: false
           generate_release_notes: true
