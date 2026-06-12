@@ -30,8 +30,6 @@ Source: "..\release\vinyl-reel\bin\64bit\*"; DestDir: "{app}\bin\64bit"; Flags: 
 Source: "..\release\vinyl-reel\data\*"; DestDir: "{app}\data"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [InstallDelete]
-Type: files; Name: "{app}\bin\64bit\obs.dll"
-Type: files; Name: "{app}\bin\64bit\obs-frontend-api.dll"
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
