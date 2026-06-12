@@ -30,6 +30,14 @@ jobs:
         shell: pwsh
         run: cmake --install build_windows --config RelWithDebInfo
 
+      - name: Prune Host OBS DLLs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $BinDir = Join-Path (Get-Location) 'release/vinyl-reel/bin/64bit'
+          Remove-Item (Join-Path $BinDir 'obs.dll') -Force -ErrorAction SilentlyContinue
+          Remove-Item (Join-Path $BinDir 'obs-frontend-api.dll') -Force -ErrorAction SilentlyContinue
+
       - name: Package
         shell: pwsh
         run: |
